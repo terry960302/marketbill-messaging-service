@@ -1,0 +1,14 @@
+database:
+  user: marketbill
+  password: marketbill1234!
+  net: tcp
+  host: marketbill-db.ciegftzvpg1l.ap-northeast-2.rds.amazonaws.com
+  port: 5432
+  dbname: postgres
+
+server:
+  port: 8000
+
+api:
+  host : https://sens.apigw.ntruss.com
+  service_id: ncp:sms:kr:290881020329:marketbill-project
