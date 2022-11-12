@@ -13,7 +13,7 @@ RUN apk update && \
 
 COPY . /app
 
-EXPOSE 8000
+EXPOSE 80
 
 RUN go build main.go
 CMD ["./main"]
