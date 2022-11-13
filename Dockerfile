@@ -1,4 +1,5 @@
-FROM golang:alpine3.16	
+# aws go image 
+FROM golang:alpine3.16
 LABEL Terry Kim <terry960302@gmail.com>
 
 
@@ -13,7 +14,7 @@ RUN apk update && \
 
 COPY . /app
 
-EXPOSE 80
+EXPOSE 8000
 
 RUN go build main.go
 CMD ["./main"]

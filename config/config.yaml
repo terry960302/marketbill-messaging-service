@@ -7,7 +7,7 @@ database:
   dbname: postgres
 
 server:
-  port: 80
+  port: 8000
 
 api:
   host : https://sens.apigw.ntruss.com
