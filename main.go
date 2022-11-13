@@ -11,7 +11,8 @@ func main() {
 	config.ReadConfig()
 
 	e := echo.New()
-	e.GET("/", handlers.PingPong)
+	e.GET("/", handlers.CheckServer)
+	e.GET("/health", handlers.HealthCheck)
 	e.POST("/messaging/sms", handlers.HandleSMS)
 	e.Logger.Fatal(e.Start(":" + config.C.Server.Port))
 }
