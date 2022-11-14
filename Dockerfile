@@ -1,5 +1,5 @@
 # aws go image 
-FROM golang:1.19.3-debian-11-r4	
+FROM public.ecr.aws/docker/library/golang:alpine3.16
 LABEL Terry Kim <terry960302@gmail.com>
 
 
