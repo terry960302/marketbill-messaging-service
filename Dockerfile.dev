@@ -15,7 +15,7 @@ RUN apk update && \
 COPY . /app
 
 EXPOSE 8000
-ENV PROFILE=prod
+ENV PROFILE=dev
 
 RUN go build main.go
 CMD ["./main"]

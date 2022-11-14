@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/spf13/viper"
@@ -36,7 +38,14 @@ var C config
 func ReadConfig() {
 	Config := &C
 
-	viper.SetConfigName("config")
+	profile := os.Getenv("PROFILE")
+	fmt.Println("Current Profile: ", profile)
+
+	if profile == "prod" {
+		viper.SetConfigName("config")
+	} else {
+		viper.SetConfigName("config.dev")
+	}
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("config") // local file
 	viper.AutomaticEnv()
