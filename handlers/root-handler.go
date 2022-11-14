@@ -1,19 +1,22 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CheckServer(c echo.Context) error {
-	msg := "Marketbill Messaging Service is running..."
+	profile := os.Getenv("PROFILE")
+	msg := fmt.Sprintf("[%s]", profile) + "Marketbill Messaging Service is running..."
 	return c.String(http.StatusOK, msg)
 }
 
 func HealthCheck(c echo.Context) error {
 	health := map[string]interface{}{
-		"HEALTH": "UP",
+		"status": "UP",
 	}
 	return c.JSON(http.StatusOK, health)
 }
