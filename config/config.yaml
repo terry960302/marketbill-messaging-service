@@ -4,7 +4,7 @@ database:
   net: tcp
   host: marketbill-db.ciegftzvpg1l.ap-northeast-2.rds.amazonaws.com
   port: 5432
-  dbname: postgres
+  dbname: prod-db
 
 server:
   port: 8000
