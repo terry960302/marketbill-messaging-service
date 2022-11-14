@@ -1,5 +1,5 @@
 # aws go image 
-FROM golang:alpine3.16
+FROM golang:1.19.3-debian-11-r4	
 LABEL Terry Kim <terry960302@gmail.com>
 
 
