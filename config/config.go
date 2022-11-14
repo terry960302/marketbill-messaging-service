@@ -26,9 +26,11 @@ type config struct {
 		Port string
 	}
 	Api struct {
-		Host      string
-		ServiceId string `mapstructure:"service_id"`
-		Key       string
+		Host        string
+		ServiceId   string `mapstructure:"service_id"`
+		Key         string
+		SecretKey   string `mapstructure:"secret_key"`
+		AccessKeyId string `mapstructure:"access_key_id"`
 	}
 }
 
@@ -43,8 +45,10 @@ func ReadConfig() {
 
 	if profile == "prod" {
 		viper.SetConfigName("config")
-	} else {
+	} else if profile == "dev" {
 		viper.SetConfigName("config.dev")
+	} else {
+		viper.SetConfigName("config.local")
 	}
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("config") // local file

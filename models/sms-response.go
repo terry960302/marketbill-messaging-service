@@ -1,8 +1,8 @@
 package models
 
 type SmsResponse struct {
-	RequestId   string
-	RequestTime string
-	StatusCode  string
-	StatusName  string
+	RequestId   string `json:"requestId"`
+	RequestTime string `json:"requestTime"`
+	StatusCode  string `json:"statusCode"`
+	StatusName  string `json:"statusName"`
 }

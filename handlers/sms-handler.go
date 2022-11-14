@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"marketbill-messaging-service/models"
 	"marketbill-messaging-service/services"
 	"net/http"
 
@@ -9,7 +9,15 @@ import (
 )
 
 func HandleSMS(c echo.Context) error {
-	err := services.SendDefaultSMS("01091751159", "01091751159", "안녕 난 테스트야")
-	fmt.Println(err)
-	return c.String(http.StatusOK, "heehhe")
+	req := models.DefaultSmsRequest{}
+	if err := c.Bind(&req); err != nil {
+		c.Error(err)
+	}
+
+	res, err := services.SendDefaultSMS(req.To, req.Message)
+	if err != nil {
+		c.Error(err)
+	}
+
+	return c.JSON(http.StatusOK, res)
 }
