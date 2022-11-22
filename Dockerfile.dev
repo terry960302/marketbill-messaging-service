@@ -17,5 +17,7 @@ COPY . /app
 EXPOSE 8000
 ENV PROFILE=dev
 
-RUN go build main.go
-CMD ["./main"]
+RUN go build -o main.go
+# CMD ["./main"]
+ENTRYPOINT [ "/main" ]     
+
