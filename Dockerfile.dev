@@ -1,5 +1,6 @@
 # aws go image 
-FROM public.ecr.aws/docker/library/golang:alpine3.16
+# FROM public.ecr.aws/docker/library/golang:alpine3.16
+FROM public.ecr.aws/lambda/go:1.2022.11.15.11
 LABEL Terry Kim <terry960302@gmail.com>
 
 
