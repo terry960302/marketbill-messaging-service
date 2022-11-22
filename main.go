@@ -13,12 +13,16 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func handle(ctx context.Context, request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+func init() {
 	config.ReadConfig()
-
-	eventType := request.QueryStringParameters["event"]
 	profile := os.Getenv("PROFILE")
 	log.Print("PROFILE : ", profile)
+}
+
+func LambdaHandler(ctx context.Context, request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+
+	eventType := request.QueryStringParameters["event"]
+
 	log.Print("Event-type : ", eventType)
 
 	r := models.LambdaResponse{}
@@ -35,5 +39,5 @@ func handle(ctx context.Context, request events.APIGatewayProxyRequest) (*events
 }
 
 func main() {
-	lambda.Start(handle)
+	lambda.Start(LambdaHandler)
 }
