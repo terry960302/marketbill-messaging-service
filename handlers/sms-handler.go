@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
-func HandleDefaultSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandleDefaultSMS(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 	r := models.LambdaResponse{}
 	req := models.DefaultSmsRequest{}
 

@@ -10,9 +10,9 @@ import (
 type LambdaResponse struct {
 }
 
-func (r *LambdaResponse) Error(statusCode int, message string) (events.APIGatewayProxyResponse, error) {
+func (r *LambdaResponse) Error(statusCode int, message string) (*events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}
-	return events.APIGatewayProxyResponse{
+	return &events.APIGatewayProxyResponse{
 		StatusCode:        statusCode,
 		Headers:           headers,
 		MultiValueHeaders: nil,
@@ -20,12 +20,12 @@ func (r *LambdaResponse) Error(statusCode int, message string) (events.APIGatewa
 		IsBase64Encoded:   false}, nil
 }
 
-func (r *LambdaResponse) Json(statusCode int, body any) (events.APIGatewayProxyResponse, error) {
+func (r *LambdaResponse) Json(statusCode int, body any) (*events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}
 
 	bytes, err := json.Marshal(body)
 	if err != nil {
-		return events.APIGatewayProxyResponse{
+		return &events.APIGatewayProxyResponse{
 			StatusCode:        http.StatusInternalServerError,
 			Headers:           headers,
 			MultiValueHeaders: nil,
@@ -33,7 +33,7 @@ func (r *LambdaResponse) Json(statusCode int, body any) (events.APIGatewayProxyR
 			IsBase64Encoded:   false}, nil
 	}
 
-	return events.APIGatewayProxyResponse{
+	return &events.APIGatewayProxyResponse{
 		StatusCode:        statusCode,
 		Headers:           headers,
 		MultiValueHeaders: nil,

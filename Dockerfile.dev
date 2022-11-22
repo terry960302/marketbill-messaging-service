@@ -18,6 +18,5 @@ EXPOSE 8000
 ENV PROFILE=dev
 
 RUN go build -o main.go
-# CMD ["./main"]
-ENTRYPOINT [ "/main" ]     
+CMD ["./main"]
 
