@@ -2,10 +2,9 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"log"
+	"marketbill-messaging-service/handlers"
 	"marketbill-messaging-service/models"
-	"marketbill-messaging-service/services"
 	"net/http"
 	"os"
 
@@ -19,19 +18,16 @@ func init() {
 }
 
 func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+
 	r := models.LambdaResponse{}
-	req := models.DefaultSmsRequest{}
-
-	if err := json.Unmarshal([]byte(request.Body), &req); err != nil {
-		return r.Error(http.StatusBadRequest, err.Error())
+	switch request.HTTPMethod {
+	case "GET":
+		return handlers.HealthCheck(request)
+	case "POST":
+		return handlers.HandleDefaultSMS(request)
+	default:
+		return r.Error(http.StatusBadRequest, "Wrong http method")
 	}
-
-	res, err := services.SendDefaultSMS(req.To, req.Message)
-	if err != nil {
-		return r.Error(http.StatusInternalServerError, err.Error())
-
-	}
-	return r.Json(http.StatusOK, res)
 }
 
 func main() {
