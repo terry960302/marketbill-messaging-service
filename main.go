@@ -20,7 +20,7 @@ func init() {
 }
 
 func LambdaHandler(ctx context.Context, request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
-
+	log.Print("[LambdaHandler] Hello world!")
 	eventType := request.QueryStringParameters["event"]
 
 	log.Print("Event-type : ", eventType)
