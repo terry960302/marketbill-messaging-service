@@ -5,3 +5,7 @@ zip main.zip main
 
 mv main ./build/
 mv main.zip ./build/
+
+NAME=messaging-dev
+FILE_PATH=build/main.zip
+aws lambda update-function-code --function-name $NAME --zip-file fileb://$FILE_PATH
