@@ -26,6 +26,7 @@ func LambdaHandler(ctx context.Context, request events.APIGatewayProxyRequest) (
 	log.Print("Event-type : ", eventType)
 
 	r := models.LambdaResponse{}
+
 	switch eventType {
 	case "ping":
 		return handlers.HealthCheck(request)
