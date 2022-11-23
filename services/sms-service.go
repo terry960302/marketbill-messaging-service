@@ -4,19 +4,23 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"marketbill-messaging-service/config"
 	"marketbill-messaging-service/constants"
 	"marketbill-messaging-service/models"
 	"marketbill-messaging-service/utils"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
 func SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
-	host := config.C.Api.Host
-	serviceId := config.C.Api.ServiceId
+	// host := config.C.Api.Host
+	// serviceId := config.C.Api.ServiceId
+	host := os.Getenv("SENS_HOST")
+	serviceId := os.Getenv("SENS_SERVICE_ID")
+	accessKeyId := os.Getenv("SENS_ACCESS_KEY_ID")
+
 	path := "/sms/v2/services/" + serviceId + "/messages"
 	url := host + path
 
@@ -45,11 +49,11 @@ func SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
 	defer req.Body.Close()
 
 	timestamp := time.Now().UnixNano() / int64(time.Millisecond)
-	signature := generateSignature("POST", path, timestamp, config.C.Api.AccessKeyId)
+	signature := generateSignature("POST", path, timestamp, accessKeyId)
 
 	req.Header.Add("Content-type", "application/json")
 	req.Header.Add("x-ncp-apigw-timestamp", strconv.Itoa(int(timestamp)))
-	req.Header.Add("x-ncp-iam-access-key", config.C.Api.AccessKeyId)
+	req.Header.Add("x-ncp-iam-access-key", accessKeyId)
 	req.Header.Add("x-ncp-apigw-signature-v2", signature)
 
 	client := &http.Client{}
@@ -73,6 +77,8 @@ func SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
 }
 
 func generateSignature(method string, path string, timestamp int64, accessKey string) string {
+	secretKey := os.Getenv("SENS_SECRET_KEY")
+	// secretKey := config.C.Api.SecretKey
 	bodyList := []string{
 		method,
 		" ",
@@ -83,6 +89,6 @@ func generateSignature(method string, path string, timestamp int64, accessKey st
 		accessKey,
 	}
 	body := strings.Join(bodyList, "")
-	sig := utils.HMAC256(body, config.C.Api.SecretKey)
+	sig := utils.HMAC256(body, secretKey)
 	return sig
 }

@@ -15,7 +15,7 @@ import (
 // 	return c.String(http.StatusOK, msg)
 // }
 
-func HealthCheck(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+func HealthCheck(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	r := models.LambdaResponse{}
 	profile := os.Getenv("PROFILE")
 	return r.Json(http.StatusOK, fmt.Sprintf("[%s] Marketbill messaging service is running...", profile))
