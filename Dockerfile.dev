@@ -34,9 +34,9 @@ FROM public.ecr.aws/lambda/provided:al2
 COPY --from=build /main /main
 
 ENV PROFILE=dev
-ENV SENS_HOST : https://sens.apigw.ntruss.com
-ENV SENS_SERVICE_ID: ncp:sms:kr:290881020329:marketbill-project
-ENV SENS_ACCESS_KEY_ID : 2aJkrtHdUtk5NP4oG8yh
-ENV SENS_SECRET_KEY : x2A3OXOz0P1qmaLDnTiqo2dQ7if6BzOElQEPNg6b
+ENV SENS_HOST=https://sens.apigw.ntruss.com
+ENV SENS_SERVICE_ID=ncp:sms:kr:290881020329:marketbill-project
+ENV SENS_ACCESS_KEY_ID=2aJkrtHdUtk5NP4oG8yh
+ENV SENS_SECRET_KEY=x2A3OXOz0P1qmaLDnTiqo2dQ7if6BzOElQEPNg6b
 
 ENTRYPOINT [ "/main" ]
