@@ -29,11 +29,20 @@ func LambdaHandler(ctx context.Context, request events.APIGatewayProxyRequest) (
 
 	switch eventType {
 	case "ping":
-		return handlers.HealthCheck(request)
+		if request.HTTPMethod == "GET" {
+			return handlers.HealthCheck(request)
+		} else {
+			return r.Error(http.StatusMethodNotAllowed, "Wrong http method")
+		}
 	case "sms":
-		return handlers.HandleDefaultSMS(request)
+		if request.HTTPMethod == "POST" {
+			return handlers.HandleDefaultSMS(request)
+		} else {
+			return r.Error(http.StatusMethodNotAllowed, "Wrong http method")
+		}
+
 	case "messaging":
-		return r.Error(http.StatusInternalServerError, "no functions in this event...")
+		return r.Error(http.StatusInternalServerError, "Still no functions in this event...")
 	default:
 		return r.Error(http.StatusBadRequest, "Wrong event type")
 	}
