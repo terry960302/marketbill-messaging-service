@@ -28,12 +28,23 @@ func NewSmsService(db *gorm.DB) *SmsService {
 
 func (s *SmsService) SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
 	defer func() {
-		status := constants.SUCCESS
-		errLog := ""
-		if err := recover(); err != nil {
+		var status string = constants.SUCCESS
+		var errLog string = ""
+		var err error = nil
+
+		if r := recover(); r != nil {
+			switch x := r.(type) {
+			case string:
+				err = errors.New(x)
+			case error:
+				err = x
+			default:
+				err = errors.New("unknown panic")
+			}
 			status = constants.FAILURE
-			errLog = fmt.Sprint(err)
+			errLog = err.Error()
 		}
+
 		log := models.SendSmsLogs{
 			To:      to,
 			Message: msg,
