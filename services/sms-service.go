@@ -3,6 +3,8 @@ package services
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"marketbill-messaging-service/constants"
 	"marketbill-messaging-service/models"
@@ -12,9 +14,35 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"gorm.io/gorm"
 )
 
-func SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
+type SmsService struct {
+	db *gorm.DB
+}
+
+func NewSmsService(db *gorm.DB) *SmsService {
+	return &SmsService{db: db}
+}
+
+func (s *SmsService) SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
+	defer func() {
+		status := constants.SUCCESS
+		errLog := ""
+		if err := recover(); err != nil {
+			status = constants.FAILURE
+			errLog = fmt.Sprint(err)
+		}
+		log := models.SendSmsLogs{
+			To:      to,
+			Message: msg,
+			Status:  status,
+			Log:     errLog,
+		}
+		s.db.Save(log)
+	}()
+
 	host := os.Getenv("SENS_HOST")
 	serviceId := os.Getenv("SENS_SERVICE_ID")
 	accessKeyId := os.Getenv("SENS_ACCESS_KEY_ID")
@@ -72,6 +100,14 @@ func SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
 	}
 
 	return &smsResp, nil
+}
+
+func (s *SmsService) SendSmsUsingTemplate(to string, template string, args ...interface{}) (*models.SmsResponse, error) {
+	if len(args) != 1 {
+		return nil, errors.New("SendVerificationSms: Invalid args. There's must be 1 args")
+	}
+	message := fmt.Sprintf(template, args...)
+	return s.SendDefaultSMS(to, message)
 }
 
 func generateSignature(method string, path string, timestamp int64, accessKey string) string {

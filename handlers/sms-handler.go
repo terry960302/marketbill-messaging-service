@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"marketbill-messaging-service/constants"
+	"marketbill-messaging-service/datastore"
 	"marketbill-messaging-service/models"
 	"marketbill-messaging-service/services"
 	"net/http"
@@ -11,26 +12,15 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
-func HandleDefaultSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	r := models.NewLambdaResponse()
-	req := models.DefaultSmsRequest{}
-
-	if err := json.Unmarshal([]byte(request.Body), &req); err != nil {
-		return r.Error(http.StatusBadRequest, err.Error())
-	}
-
-	res, err := services.SendDefaultSMS(req.To, req.Message)
-	if err != nil {
-		return r.Error(http.StatusInternalServerError, err.Error())
-
-	}
-	return r.Json(http.StatusOK, res)
-}
-
 func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	r := models.NewLambdaResponse()
 
 	req := models.MessagingRequest{}
+	db, err := datastore.NewPostgresql()
+	if err != nil {
+		r.Error(http.StatusInternalServerError, err.Error())
+	}
+	smsService := services.NewSmsService(db)
 
 	if err := json.Unmarshal([]byte(request.Body), &req); err != nil {
 		e := fmt.Sprintf("[HandleSMS] Unmarshal > %s", err.Error())
@@ -40,24 +30,43 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	switch req.MessageType {
 	case constants.Default.String():
 		msg := req.Args[0].(string)
-		res, err := services.SendDefaultSMS(req.To, msg)
+		res, err := smsService.SendDefaultSMS(req.To, msg)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.Verification.String():
-		break
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.Verification.Template(), req.Args...)
+		if err != nil {
+			return r.Error(http.StatusInternalServerError, err.Error())
+		}
+		return r.Json(http.StatusOK, res)
 	case constants.ApplyBizConnection.String():
-		break
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ApplyBizConnection.Template(), req.Args...)
+		if err != nil {
+			return r.Error(http.StatusInternalServerError, err.Error())
+		}
+		return r.Json(http.StatusOK, res)
 	case constants.ConfirmBizConnection.String():
-		break
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ConfirmBizConnection.Template(), req.Args...)
+		if err != nil {
+			return r.Error(http.StatusInternalServerError, err.Error())
+		}
+		return r.Json(http.StatusOK, res)
 	case constants.RejectBizConnection.String():
-		break
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.RejectBizConnection.Template(), req.Args...)
+		if err != nil {
+			return r.Error(http.StatusInternalServerError, err.Error())
+		}
+		return r.Json(http.StatusOK, res)
 	case constants.IssueOrderSheetReceipt.String():
-		break
-
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.IssueOrderSheetReceipt.Template(), req.Args...)
+		if err != nil {
+			return r.Error(http.StatusInternalServerError, err.Error())
+		}
+		return r.Json(http.StatusOK, res)
+	default:
+		return r.Error(http.StatusBadRequest, "Bad Request : Wrong message type")
 	}
-
-	return r.Json(http.StatusOK, "")
 }
