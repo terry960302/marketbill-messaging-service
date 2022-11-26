@@ -113,9 +113,14 @@ func (s *SmsService) SendDefaultSMS(to string, msg string) (*models.SmsResponse,
 	return &smsResp, nil
 }
 
-func (s *SmsService) SendSmsUsingTemplate(to string, template string, args ...interface{}) (*models.SmsResponse, error) {
-	if len(args) != 1 {
-		return nil, errors.New("SendVerificationSms: Invalid args. There's must be 1 args")
+// [to] : 받는 사람
+// [template] : 메세지 템플릿
+// [argsLength] : 템플릿에 들어가야하는 적정 args 개수
+// [args] : 템플릿 내용에 필요한 값들
+func (s *SmsService) SendSmsUsingTemplate(to string, template string, argsLength int, args ...interface{}) (*models.SmsResponse, error) {
+	if len(args) != argsLength {
+		e := fmt.Sprintf("SendSmsUsingTemplate: Invalid args. There's must be %d args", argsLength)
+		return nil, errors.New(e)
 	}
 	message := fmt.Sprintf(template, args...)
 	return s.SendDefaultSMS(to, message)

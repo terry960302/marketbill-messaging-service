@@ -36,31 +36,31 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.Verification.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.Verification.Template(), req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.Verification.Template(), 1, req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.ApplyBizConnection.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ApplyBizConnection.Template(), req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ApplyBizConnection.Template(), 2, req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.ConfirmBizConnection.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ConfirmBizConnection.Template(), req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ConfirmBizConnection.Template(), 3, req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.RejectBizConnection.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.RejectBizConnection.Template(), req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.RejectBizConnection.Template(), 2, req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.IssueOrderSheetReceipt.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.IssueOrderSheetReceipt.Template(), req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.IssueOrderSheetReceipt.Template(), 3, req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
