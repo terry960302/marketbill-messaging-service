@@ -19,12 +19,12 @@ func init() {
 
 func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	r := models.LambdaResponse{}
+	r := models.NewLambdaResponse()
 	switch request.HTTPMethod {
 	case "GET":
 		return handlers.HealthCheck(request)
 	case "POST":
-		return handlers.HandleDefaultSMS(request)
+		return handlers.HandleSMS(request)
 	default:
 		return r.Error(http.StatusBadRequest, "Wrong http method")
 	}

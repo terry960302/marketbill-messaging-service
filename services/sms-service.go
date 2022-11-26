@@ -15,8 +15,6 @@ import (
 )
 
 func SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
-	// host := config.C.Api.Host
-	// serviceId := config.C.Api.ServiceId
 	host := os.Getenv("SENS_HOST")
 	serviceId := os.Getenv("SENS_SERVICE_ID")
 	accessKeyId := os.Getenv("SENS_ACCESS_KEY_ID")
@@ -78,7 +76,6 @@ func SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
 
 func generateSignature(method string, path string, timestamp int64, accessKey string) string {
 	secretKey := os.Getenv("SENS_SECRET_KEY")
-	// secretKey := config.C.Api.SecretKey
 	bodyList := []string{
 		method,
 		" ",

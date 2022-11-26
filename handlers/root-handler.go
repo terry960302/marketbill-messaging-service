@@ -10,7 +10,7 @@ import (
 )
 
 func HealthCheck(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	r := models.LambdaResponse{}
+	r := models.NewLambdaResponse()
 	profile := os.Getenv("PROFILE")
 	return r.Json(http.StatusOK, fmt.Sprintf("[%s] Marketbill messaging service is running....", profile))
 }

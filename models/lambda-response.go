@@ -10,6 +10,10 @@ import (
 type LambdaResponse struct {
 }
 
+func NewLambdaResponse() *LambdaResponse {
+	return &LambdaResponse{}
+}
+
 func (r *LambdaResponse) Error(statusCode int, message string) (events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}
 	return events.APIGatewayProxyResponse{
