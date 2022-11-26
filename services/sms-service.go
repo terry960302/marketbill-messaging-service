@@ -49,9 +49,9 @@ func (s *SmsService) SendDefaultSMS(to string, msg string) (*models.SmsResponse,
 			To:      to,
 			Message: msg,
 			Status:  status,
-			Log:     errLog,
+			ErrLogs: errLog,
 		}
-		s.db.Save(log)
+		s.db.Create(&log)
 	}()
 
 	host := os.Getenv("SENS_HOST")

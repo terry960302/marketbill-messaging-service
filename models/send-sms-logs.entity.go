@@ -7,5 +7,5 @@ type SendSmsLogs struct {
 	To      string `json:"to"`
 	Message string `json:"message"`
 	Status  string `json:"status"` // SUCCESS, FAILURE
-	Log     string `gorm:"type:text" json:"log"`
+	ErrLogs string `gorm:"type:text" json:"err_logs"`
 }
