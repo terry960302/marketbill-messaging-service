@@ -18,13 +18,13 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	req := models.MessagingRequest{}
 	db, err := datastore.NewPostgresql()
 	if err != nil {
-		r.Error(http.StatusInternalServerError, err.Error())
+		return r.Error(http.StatusInternalServerError, err.Error())
 	}
 	smsService := services.NewSmsService(db)
 
 	if err := json.Unmarshal([]byte(request.Body), &req); err != nil {
 		e := fmt.Sprintf("[HandleSMS] Unmarshal > %s", err.Error())
-		r.Error(http.StatusInternalServerError, e)
+		return r.Error(http.StatusInternalServerError, e)
 	}
 
 	switch req.MessageType {
@@ -33,7 +33,6 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		res, err := smsService.SendDefaultSMS(req.To, msg)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
-
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.Verification.String():
