@@ -5,3 +5,10 @@ const (
 	SUCCESS = "SUCCESS"
 	FAILURE = "FAILURE"
 )
+
+const (
+	SMS                  = "SMS"
+	MMS                  = "MMS"
+	LMS                  = "LMS"
+	MAX_SMS_BYTES_LENGTH = 80
+)

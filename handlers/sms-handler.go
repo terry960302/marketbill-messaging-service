@@ -30,7 +30,7 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	switch req.MessageType {
 	case constants.Default.String():
 		msg := req.Args[0].(string)
-		res, err := smsService.SendDefaultSMS(req.To, msg)
+		res, err := smsService.SendDefaultSMS(req.To, msg, constants.SMS)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}

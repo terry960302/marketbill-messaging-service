@@ -26,7 +26,7 @@ func NewSmsService(db *gorm.DB) *SmsService {
 	return &SmsService{db: db}
 }
 
-func (s *SmsService) SendDefaultSMS(to string, msg string) (*models.SmsResponse, error) {
+func (s *SmsService) SendDefaultSMS(to string, msg string, sendType string) (*models.SmsResponse, error) {
 	defer func() {
 		var status string = constants.SUCCESS
 		var errLog string = ""
@@ -62,7 +62,7 @@ func (s *SmsService) SendDefaultSMS(to string, msg string) (*models.SmsResponse,
 	url := host + path
 
 	var reqBody models.SmsRequest = models.SmsRequest{
-		Type:    "SMS",
+		Type:    sendType,
 		From:    constants.FROM_PHONE_NO,
 		Content: msg,
 		Messages: []models.SmsMessage{
@@ -123,7 +123,13 @@ func (s *SmsService) SendSmsUsingTemplate(to string, template string, argsLength
 		return nil, errors.New(e)
 	}
 	message := fmt.Sprintf(template, args...)
-	return s.SendDefaultSMS(to, message)
+	var sendType string = constants.SMS
+
+	bytes := []byte(message)
+	if len(bytes) > constants.MAX_SMS_BYTES_LENGTH {
+		sendType = constants.LMS
+	}
+	return s.SendDefaultSMS(to, message, sendType)
 }
 
 func generateSignature(method string, path string, timestamp int64, accessKey string) string {
