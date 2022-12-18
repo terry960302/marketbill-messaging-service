@@ -31,7 +31,7 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 
 	// dev 환경에서는 팀 내부에서만 SMS 보낼 수 있도록 제한
 	if err := validatePhoneNoInDev(req.To); err != nil {
-		r.Error(http.StatusBadRequest, err.Error())
+		return r.Error(http.StatusBadRequest, err.Error())
 	}
 
 	switch req.MessageType {
