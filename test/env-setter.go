@@ -1,6 +1,9 @@
 package test
 
-import "os"
+import (
+	"log"
+	"os"
+)
 
 type EnvSetter struct {
 	Env string
@@ -46,4 +49,5 @@ func (e *EnvSetter) SetEnv() {
 		os.Setenv("DB_NAME", "prod-db")
 	}
 
+	log.Printf("PROFILE : %s", os.Getenv("PROFILE"))
 }
