@@ -1,4 +1,4 @@
-package handlers
+package controllers
 
 import (
 	"encoding/json"
@@ -31,10 +31,11 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 
 	// dev 환경에서는 팀 내부에서만 SMS 보낼 수 있도록 제한
 	if err := validatePhoneNoInDev(req.To); err != nil {
-		return r.Error(http.StatusBadRequest, err.Error())
+		msg := "Not supported phone number to send message(using SENS). Some phone numbers could restricted in local, dev environment. But not consider this issue as error."
+		return r.Json(http.StatusContinue, msg)
 	}
 
-	switch req.MessageType {
+	switch req.Template {
 	case constants.Default.String():
 		msg := req.Args[0].(string)
 		res, err := smsService.SendDefaultSMS(req.To, msg, constants.SMS)

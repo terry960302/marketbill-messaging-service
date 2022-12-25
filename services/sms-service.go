@@ -26,7 +26,12 @@ func NewSmsService(db *gorm.DB) *SmsService {
 	return &SmsService{db: db}
 }
 
-func (s *SmsService) SendDefaultSMS(to string, msg string, sendType string) (*models.SmsResponse, error) {
+/** @{params}
+- to : 받는 사람
+- msg : 메세지 내용
+- sendType : SMS, LMS, MMS 와 같은 메세지 포맷
+*/
+func (s *SmsService) SendDefaultSMS(to string, msg string, sendType string) (*models.SensResponse, error) {
 	defer func() {
 		var status string = constants.SUCCESS
 		var errLog string = ""
@@ -57,15 +62,21 @@ func (s *SmsService) SendDefaultSMS(to string, msg string, sendType string) (*mo
 	host := os.Getenv("SENS_HOST")
 	serviceId := os.Getenv("SENS_SERVICE_ID")
 	accessKeyId := os.Getenv("SENS_ACCESS_KEY_ID")
+	supportedSendTypes := []string{constants.SMS, constants.LMS, constants.MMS}
+
+	if !contains(supportedSendTypes, sendType) {
+		msg := fmt.Sprintf("not supported send-type(%s). send-type should one of SMS, LMS, MMS", sendType)
+		return nil, errors.New(msg)
+	}
 
 	path := "/sms/v2/services/" + serviceId + "/messages"
 	url := host + path
 
-	var reqBody models.SmsRequest = models.SmsRequest{
+	var reqBody models.SensRequest = models.SensRequest{
 		Type:    sendType,
 		From:    constants.FROM_PHONE_NO,
 		Content: msg,
-		Messages: []models.SmsMessage{
+		Messages: []models.SensMessage{
 			{
 				To: to,
 			},
@@ -105,7 +116,7 @@ func (s *SmsService) SendDefaultSMS(to string, msg string, sendType string) (*mo
 		return nil, err
 	}
 
-	var smsResp models.SmsResponse
+	var smsResp models.SensResponse
 	if err := json.Unmarshal(respBody, &smsResp); err != nil {
 		return nil, err
 	}
@@ -117,7 +128,7 @@ func (s *SmsService) SendDefaultSMS(to string, msg string, sendType string) (*mo
 // [template] : 메세지 템플릿
 // [argsLength] : 템플릿에 들어가야하는 적정 args 개수
 // [args] : 템플릿 내용에 필요한 값들
-func (s *SmsService) SendSmsUsingTemplate(to string, template string, argsLength int, args ...interface{}) (*models.SmsResponse, error) {
+func (s *SmsService) SendSmsUsingTemplate(to string, template string, argsLength int, args ...interface{}) (*models.SensResponse, error) {
 	if len(args) != argsLength {
 		e := fmt.Sprintf("SendSmsUsingTemplate: Invalid args. There's must be %d args", argsLength)
 		return nil, errors.New(e)
@@ -146,4 +157,13 @@ func generateSignature(method string, path string, timestamp int64, accessKey st
 	body := strings.Join(bodyList, "")
 	sig := utils.HMAC256(body, secretKey)
 	return sig
+}
+
+func contains(arr []string, element string) bool {
+	for _, value := range arr {
+		if value == element {
+			return true
+		}
+	}
+	return false
 }
