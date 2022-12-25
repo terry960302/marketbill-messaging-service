@@ -32,6 +32,7 @@ func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 
 func main() {
 	lambda.Start(HandleRequest)
+
 	// os.Setenv("PROFILE", "dev")
 	// os.Setenv("SENS_HOST", "https://sens.apigw.ntruss.com")
 	// os.Setenv("SENS_SERVICE_ID", "ncp:sms:kr:290881020329:marketbill-project")
