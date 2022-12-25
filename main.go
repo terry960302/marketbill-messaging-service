@@ -2,14 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
-	"marketbill-messaging-service/constants"
 	"marketbill-messaging-service/controllers"
-	"marketbill-messaging-service/datastore"
 	"marketbill-messaging-service/models"
-	"marketbill-messaging-service/services"
-	"marketbill-messaging-service/test"
 	"net/http"
 	"os"
 
@@ -39,15 +34,16 @@ func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 // }
 
 // test
-func main() {
-	setter := test.NewEnvSetter("local")
-	setter.SetEnv()
+// func main() {
+// 	setter := test.NewEnvSetter("local")
+// 	setter.SetEnv()
 
-	db, _ := datastore.NewPostgresql()
-	s := services.NewSmsService(db)
-	res, err := s.SendDefaultSMS("01091751159", "this is test", constants.SMS)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(res)
-}
+// 	db, _ := datastore.NewPostgresql()
+
+// 	req := models.MessagingRequest{
+// 		To:       "01091751159",
+// 		Template: "Default",
+// 		Args:     []any{"01011010100"},
+// 	}
+// 	ctrl := controllers.HandleSMS(req)
+// }
