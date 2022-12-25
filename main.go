@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 func init() {
@@ -29,9 +30,9 @@ func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 	}
 }
 
-// func main() {
-// 	lambda.Start(HandleRequest)
-// }
+func main() {
+	lambda.Start(HandleRequest)
+}
 
 // test
 // func main() {
