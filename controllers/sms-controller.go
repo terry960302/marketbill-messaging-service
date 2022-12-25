@@ -74,7 +74,7 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		}
 		return r.Json(http.StatusOK, res)
 	default:
-		return r.Error(http.StatusBadRequest, "Bad Request : Wrong message type")
+		return r.Error(http.StatusBadRequest, "Bad Request : Not supported template")
 	}
 }
 
