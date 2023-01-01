@@ -32,7 +32,7 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	// dev 환경에서는 팀 내부에서만 SMS 보낼 수 있도록 제한
 	if err := validatePhoneNoInDev(req.To); err != nil {
 		msg := "Not supported phone number to send message(using SENS). Some phone numbers could restricted in local, dev environment. But not consider this issue as error."
-		return r.Json(http.StatusOK, msg)
+		return r.Json(http.StatusAccepted, msg)
 	}
 
 	switch req.Template {
