@@ -81,7 +81,7 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 func validatePhoneNoInDev(phoneNo string) error {
 	profile := os.Getenv("PROFILE")
 	if profile == "dev" {
-		VALID_PHONE_NUMBERS := []string{"01091751159", "01099457328", "01096782724"} // 김태완, 안중석, 김소진(?)
+		VALID_PHONE_NUMBERS := []string{"01091751159", "01099457328", "01096782724", "01035192029"} // 김태완, 안중석, 김소진, 강수빈
 
 		count := 0
 		for _, p := range VALID_PHONE_NUMBERS {
