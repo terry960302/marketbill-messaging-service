@@ -44,31 +44,31 @@ func HandleSMS(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.Verification.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.Verification.Template(), 1, req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.Verification.Template(), constants.Verification.ArgsCount(), req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.ApplyBizConnection.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ApplyBizConnection.Template(), 2, req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ApplyBizConnection.Template(), constants.ApplyBizConnection.ArgsCount(), req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.ConfirmBizConnection.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ConfirmBizConnection.Template(), 3, req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.ConfirmBizConnection.Template(), constants.ConfirmBizConnection.ArgsCount(), req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.RejectBizConnection.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.RejectBizConnection.Template(), 2, req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.RejectBizConnection.Template(), constants.RejectBizConnection.ArgsCount(), req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
 		return r.Json(http.StatusOK, res)
 	case constants.IssueOrderSheetReceipt.String():
-		res, err := smsService.SendSmsUsingTemplate(req.To, constants.IssueOrderSheetReceipt.Template(), 3, req.Args...)
+		res, err := smsService.SendSmsUsingTemplate(req.To, constants.IssueOrderSheetReceipt.Template(), constants.IssueOrderSheetReceipt.ArgsCount(), req.Args...)
 		if err != nil {
 			return r.Error(http.StatusInternalServerError, err.Error())
 		}
