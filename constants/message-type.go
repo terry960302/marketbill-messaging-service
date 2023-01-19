@@ -29,8 +29,16 @@ var templates = [...]string{
 	"[마켓빌(marketbill)] %s 님이 주문번호 %s에 영수증을 발행했어요.\n\n마이페이지 > 주문내역”에서 영수증을 다운로드 할 수 있어요.\n\nURL : %s",  // 도매상, 주문번호, URL
 }
 
+var argCounts = [...]int{
+	1, 1, 2, 3, 3, 3,
+}
+
 func (m MessageType) String() string { return types[(m-1)%12] }
 
 func (m MessageType) Template() string {
 	return templates[(m-1)%12]
+}
+
+func (m MessageType) ArgsCount() int {
+	return argCounts[(m-1)%12]
 }
